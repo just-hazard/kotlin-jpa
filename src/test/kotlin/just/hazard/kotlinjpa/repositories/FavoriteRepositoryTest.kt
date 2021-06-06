@@ -2,10 +2,13 @@ package just.hazard.kotlinjpa.repositories
 
 import just.hazard.kotlinjpa.domain.Favorite
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
+import java.time.LocalDateTime
+import javax.persistence.EntityManager
 
 //@Test
 //void save() {
@@ -33,32 +36,52 @@ class FavoriteRepositoryTest {
 
     private lateinit var favorite: Favorite
 
+    @Autowired
+    private lateinit var entityManager: EntityManager
+
+    @AfterEach
+    fun tearDown() {
+        favoriteRepository.deleteAll()
+        entityManager
+            .createNativeQuery("alter table favorite alter column id restart 1")
+            .executeUpdate()
+    }
+
     @Test
     fun 저장() {
-        데이터_저장()
-        아이디_날짜_체크(favorite)
+        아이디_날짜_체크(데이터_저장())
     }
 
     // read
     @Test
     fun 가져오기() {
         데이터_저장()
-        val actual = 데이터_조회()
-        아이디_날짜_체크(actual.get())
+        favorite = 데이터_조회()
+        아이디_날짜_체크(favorite)
 
     }
-
-    private fun 데이터_조회() = favoriteRepository.findById(1L)
 
     @Test
     fun 수정() {
         데이터_저장()
         val present = 데이터_조회()
-        val beforeDate = present.get().modifiedDate
-        val after = favoriteRepository.save(present.get())
+        val beforeDate = present.modifiedDate
+        present.modifiedDate = LocalDateTime.now()
+        val after = favoriteRepository.save(present)
         assertThat(beforeDate).isNotEqualTo(after.modifiedDate)
-
     }
+
+    @Test
+    fun 삭제() {
+        데이터_저장()
+        favoriteRepository.delete(데이터_조회())
+//        entityManager.flush()
+        val actual = favoriteRepository.findById(1L)
+        assertThat(actual).isEmpty
+    }
+
+
+    private fun 데이터_조회(): Favorite = favoriteRepository.findById(1L).get()
 
     private fun 아이디_날짜_체크(inputFavorite: Favorite) {
         assertAll(
@@ -68,8 +91,8 @@ class FavoriteRepositoryTest {
         )
     }
 
-    private fun 데이터_저장() {
-        favorite = favoriteRepository.save(Favorite())
+    private fun 데이터_저장(): Favorite {
+        return favoriteRepository.save(Favorite())
     }
 
 }
