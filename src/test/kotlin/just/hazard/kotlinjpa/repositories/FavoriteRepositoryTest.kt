@@ -3,6 +3,7 @@ package just.hazard.kotlinjpa.repositories
 import just.hazard.kotlinjpa.domain.Favorite
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertAll
 import org.springframework.beans.factory.annotation.Autowired
@@ -39,6 +40,11 @@ class FavoriteRepositoryTest {
     @Autowired
     private lateinit var entityManager: EntityManager
 
+    @BeforeEach
+    fun setUp() {
+        데이터_저장()
+    }
+
     @AfterEach
     fun tearDown() {
         favoriteRepository.deleteAll()
@@ -55,7 +61,6 @@ class FavoriteRepositoryTest {
     // read
     @Test
     fun 가져오기() {
-        데이터_저장()
         favorite = 데이터_조회()
         아이디_날짜_체크(favorite)
 
@@ -63,7 +68,6 @@ class FavoriteRepositoryTest {
 
     @Test
     fun 수정() {
-        데이터_저장()
         val present = 데이터_조회()
         val beforeDate = present.modifiedDate
         present.modifiedDate = LocalDateTime.now()
@@ -73,7 +77,6 @@ class FavoriteRepositoryTest {
 
     @Test
     fun 삭제() {
-        데이터_저장()
         favoriteRepository.delete(데이터_조회())
 //        entityManager.flush()
         val actual = favoriteRepository.findById(1L)
