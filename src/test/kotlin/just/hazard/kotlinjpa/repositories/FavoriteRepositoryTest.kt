@@ -11,24 +11,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import java.time.LocalDateTime
 import javax.persistence.EntityManager
 
-//@Test
-//void save() {
-//    Station expected = new Station("잠실역");
-//    Station actual = stations.save(expected);
-//    assertAll(
-//        () -> assertThat(actual.getId()).isNotNull(),
-//    () -> assertThat(actual.getName()).isEqualTo(expected.getName())
-//    );
-//}
-//
-//@Test
-//void findByName() {
-//    String expected = "잠실역";
-//    stations.save(new Station(expected));
-//    String actual = stations.findByName(expected).getName();
-//    assertThat(actual).isEqualTo(expected);
-//}
-//}
 @DataJpaTest
 class FavoriteRepositoryTest {
 
@@ -63,7 +45,6 @@ class FavoriteRepositoryTest {
     fun 가져오기() {
         favorite = 데이터_조회()
         아이디_날짜_체크(favorite)
-
     }
 
     @Test
