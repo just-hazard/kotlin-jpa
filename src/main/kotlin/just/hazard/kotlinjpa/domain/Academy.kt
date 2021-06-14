@@ -11,7 +11,7 @@ class Academy(
 
     @OneToMany(cascade = [CascadeType.ALL])
     @JoinColumn(name="academy_id")
-    var subjects: MutableList<Subject> = arrayListOf()
+    var subjects: MutableList<Subject> = mutableListOf()
 ) {
     fun addSubject(subject: Subject) {
         this.subjects.add(subject)

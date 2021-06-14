@@ -25,6 +25,7 @@ class AcademyServiceTest {
         for(index in 1..10) {
             val academy = Academy(0,"아카데미${index}")
             academy.addSubject(Subject(0, "jpa${index}", academy))
+            academy.addSubject(Subject(0, "kotlin${index}", academy))
             academies.add(academy)
         }
         academyRepository.saveAll(academies)
@@ -44,7 +45,7 @@ class AcademyServiceTest {
     @Test
     fun `JPQL N+1 해결`() {
         val subjectNames = academyService.findAllJPQLSubjectNames()
-        assertThat(subjectNames.size).isEqualTo(10)
+        assertThat(subjectNames?.size).isEqualTo(10)
     }
 
     @Test

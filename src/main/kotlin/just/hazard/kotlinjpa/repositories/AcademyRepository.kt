@@ -8,9 +8,9 @@ import org.springframework.data.jpa.repository.Query
 interface AcademyRepository : JpaRepository<Academy, Long> {
 
     @Query(value = "select a from Academy a join fetch a.subjects")
-    fun findAllFetchJoin() : MutableList<Academy>
+    fun findAllFetchJoin() : MutableSet<Academy>
 
     @EntityGraph(attributePaths = ["subjects"])
-    @Query(value = "select a from Academy a")
+    @Query(value = "select DISTINCT a from Academy a")
     fun findAllEntityGraph() : MutableList<Academy>
 }
