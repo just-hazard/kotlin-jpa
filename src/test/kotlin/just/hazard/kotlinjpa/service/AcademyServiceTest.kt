@@ -46,4 +46,10 @@ class AcademyServiceTest {
         val subjectNames = academyService.findAllJPQLSubjectNames()
         assertThat(subjectNames.size).isEqualTo(10)
     }
+
+    @Test
+    fun `EntityGraph N+1 해결`() {
+        val subjectNames = academyService.findAllEntityGraphSubjectNames()
+        assertThat(subjectNames.size).isEqualTo(10)
+    }
 }

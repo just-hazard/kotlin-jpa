@@ -19,6 +19,11 @@ class AcademyService(private val academyRepository: AcademyRepository) {
         return extractSubjectNames(academyRepository.findAllFetchJoin())
     }
 
+    @Transactional(readOnly = true)
+    fun findAllEntityGraphSubjectNames() : MutableList<String> {
+        return extractSubjectNames(academyRepository.findAllEntityGraph())
+    }
+
     private fun extractSubjectNames(academies: MutableList<Academy>) : MutableList<String> {
         return academies.stream()
             .map {
