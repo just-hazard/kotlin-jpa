@@ -40,4 +40,10 @@ class AcademyServiceTest {
         val subjectNames = academyService.findAllSubjectNames()
         assertThat(subjectNames.size).isEqualTo(10)
     }
+
+    @Test
+    fun `JPQL N+1 해결`() {
+        val subjectNames = academyService.findAllJPQLSubjectNames()
+        assertThat(subjectNames.size).isEqualTo(10)
+    }
 }
