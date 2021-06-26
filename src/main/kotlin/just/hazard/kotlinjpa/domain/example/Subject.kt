@@ -1,4 +1,4 @@
-package just.hazard.kotlinjpa.domain
+package just.hazard.kotlinjpa.domain.example
 
 import javax.persistence.*
 
@@ -14,5 +14,6 @@ class Subject(
 ) {
     fun updateAcademy(academy: Academy) {
         this.academy = academy
+        academy.subjects.add(this)
     }
 }

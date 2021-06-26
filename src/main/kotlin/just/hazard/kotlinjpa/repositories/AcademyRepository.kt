@@ -1,6 +1,6 @@
 package just.hazard.kotlinjpa.repositories
 
-import just.hazard.kotlinjpa.domain.Academy
+import just.hazard.kotlinjpa.domain.example.Academy
 import org.springframework.data.jpa.repository.EntityGraph
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query

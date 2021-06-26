@@ -1,6 +1,6 @@
 package just.hazard.kotlinjpa.service
 
-import just.hazard.kotlinjpa.domain.Academy
+import just.hazard.kotlinjpa.domain.example.Academy
 import just.hazard.kotlinjpa.repositories.AcademyRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional

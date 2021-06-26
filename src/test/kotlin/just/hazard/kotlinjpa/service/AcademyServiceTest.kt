@@ -1,10 +1,9 @@
 package just.hazard.kotlinjpa.service
 
-import just.hazard.kotlinjpa.domain.Academy
-import just.hazard.kotlinjpa.domain.Subject
+import just.hazard.kotlinjpa.domain.example.Academy
+import just.hazard.kotlinjpa.domain.example.Subject
 import just.hazard.kotlinjpa.repositories.AcademyRepository
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired

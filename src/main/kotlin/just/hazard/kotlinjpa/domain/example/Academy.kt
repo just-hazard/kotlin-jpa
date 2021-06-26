@@ -1,4 +1,4 @@
-package just.hazard.kotlinjpa.domain
+package just.hazard.kotlinjpa.domain.example
 
 import javax.persistence.*
 
