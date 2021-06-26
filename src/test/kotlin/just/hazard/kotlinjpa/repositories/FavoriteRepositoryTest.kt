@@ -1,6 +1,7 @@
 package just.hazard.kotlinjpa.repositories
 
 import just.hazard.kotlinjpa.domain.Favorite
+import just.hazard.kotlinjpa.domain.Station
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -24,7 +25,7 @@ class FavoriteRepositoryTest {
 
     @BeforeEach
     fun setUp() {
-        데이터_저장()
+       favorite = 데이터_저장()
     }
 
     @AfterEach
@@ -37,7 +38,7 @@ class FavoriteRepositoryTest {
 
     @Test
     fun 저장() {
-        아이디_날짜_체크(데이터_저장())
+        아이디_날짜_체크(favorite)
     }
 
     // read
@@ -50,16 +51,17 @@ class FavoriteRepositoryTest {
     @Test
     fun 수정() {
         val present = 데이터_조회()
+        present.arrivalStation = Station("저스디스역")
         val beforeDate = present.modifiedDate
         present.modifiedDate = LocalDateTime.now()
         val after = favoriteRepository.save(present)
+        assertThat(after.arrivalStation.name).isEqualTo("저스디스역")
         assertThat(beforeDate).isNotEqualTo(after.modifiedDate)
     }
 
     @Test
     fun 삭제() {
         favoriteRepository.delete(데이터_조회())
-//        entityManager.flush()
         val actual = favoriteRepository.findById(1L)
         assertThat(actual).isEmpty
     }
@@ -72,11 +74,16 @@ class FavoriteRepositoryTest {
             { assertThat(inputFavorite.id).isNotNull() },
             { assertThat(inputFavorite.createdDate).isNotNull() },
             { assertThat(inputFavorite.modifiedDate).isNotNull() },
+            { assertThat(inputFavorite.departureStation.name).isEqualTo("서울역") },
+            { assertThat(inputFavorite.arrivalStation.name).isEqualTo("의정부역") },
         )
     }
 
     private fun 데이터_저장(): Favorite {
-        return favoriteRepository.save(Favorite())
+        return favoriteRepository.save(즐겨찾기_데이터())
     }
 
+    private fun 즐겨찾기_데이터(): Favorite {
+        return Favorite(Station("서울역"),Station("의정부역"))
+    }
 }
