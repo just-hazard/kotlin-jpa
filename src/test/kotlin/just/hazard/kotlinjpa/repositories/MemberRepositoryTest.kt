@@ -1,7 +1,6 @@
 package just.hazard.kotlinjpa.repositories
 
-import just.hazard.kotlinjpa.domain.Line
-import just.hazard.kotlinjpa.domain.Member
+import just.hazard.kotlinjpa.domain.*
 import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
@@ -38,13 +37,19 @@ class MemberRepositoryTest {
 
     @Test
     fun 생성() {
+        member.addMemberFavorite(createMemberFavorite("my","story"))
         사용자_데이터_체크(member, 20, "email", "1234")
+        즐겨찾기_지하철역_확인(member, "my", "story")
     }
 
     @Test
     fun 가져오기() {
+        member.addMemberFavorite(createMemberFavorite("my","story"))
+        member.addMemberFavorite(createMemberFavorite("의정부역","서울역"))
         val actual = 사용자_조회()
         사용자_데이터_체크(actual.get(), 20, "email", "1234")
+        즐겨찾기_지하철역_확인(actual.get(), "my", "story")
+        즐겨찾기_지하철역_확인(actual.get(), "의정부역", "서울역")
     }
 
     @Test
@@ -67,16 +72,24 @@ class MemberRepositoryTest {
         assertThat(actual).isEmpty
     }
 
+    private fun 즐겨찾기_지하철역_확인(actual: Member, departureStation: String, arrivalStation: String) {
+        actual.memberFavorites.contains(createMemberFavorite(departureStation,arrivalStation))
+    }
+
     private fun 사용자_조회() = memberRepository.findById(1L)
 
     private fun 사용자_데이터_체크(actual: Member, age: Int, email: String, password: String) {
         assertAll(
-            { Assertions.assertThat(member.age).isEqualTo(age) },
-            { Assertions.assertThat(member.email).isEqualTo(email) },
-            { Assertions.assertThat(member.password).isEqualTo(password) },
-            { Assertions.assertThat(actual.id).isNotNull() },
-            { Assertions.assertThat(actual.createdDate).isNotNull() },
-            { Assertions.assertThat(actual.modifiedDate).isNotNull() },
+            { assertThat(member.age).isEqualTo(age) },
+            { assertThat(member.email).isEqualTo(email) },
+            { assertThat(member.password).isEqualTo(password) },
+            { assertThat(actual.id).isNotNull() },
+            { assertThat(actual.createdDate).isNotNull() },
+            { assertThat(actual.modifiedDate).isNotNull() },
         )
+    }
+
+    private fun createMemberFavorite(departureStation: String, arrivalStation: String): MemberFavorite {
+        return MemberFavorite(Favorite(Station(departureStation),Station(arrivalStation)),member)
     }
 }
