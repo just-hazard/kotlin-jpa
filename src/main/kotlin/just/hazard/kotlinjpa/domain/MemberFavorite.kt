@@ -2,13 +2,11 @@ package just.hazard.kotlinjpa.domain
 
 import lombok.AccessLevel
 import lombok.NoArgsConstructor
-import javax.persistence.CascadeType
-import javax.persistence.Entity
-import javax.persistence.FetchType
-import javax.persistence.ManyToOne
+import javax.persistence.*
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(uniqueConstraints = [UniqueConstraint(name = "member_favorite_uinque", columnNames = ["id","favorite_id","member_id"])])
 class MemberFavorite(
     @ManyToOne(fetch = FetchType.LAZY, cascade = [CascadeType.PERSIST])
     var favorite: Favorite,
