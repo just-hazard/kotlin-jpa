@@ -6,7 +6,7 @@ import javax.persistence.*
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(uniqueConstraints = [UniqueConstraint(name = "member_favorite_uinque", columnNames = ["id","favorite_id","member_id"])])
+//@Table(uniqueConstraints = [UniqueConstraint(name = "member_favorite_uinque", columnNames = ["id","favorite_id","member_id"])])
 class MemberFavorite(
     @ManyToOne(fetch = FetchType.LAZY, cascade = [CascadeType.PERSIST])
     var favorite: Favorite,

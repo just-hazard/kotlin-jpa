@@ -2,13 +2,12 @@ package just.hazard.kotlinjpa.repositories
 
 import just.hazard.kotlinjpa.domain.Favorite
 import just.hazard.kotlinjpa.domain.Station
+import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertAll
+import org.junit.jupiter.api.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
+import org.springframework.dao.DataIntegrityViolationException
 import java.time.LocalDateTime
 import javax.persistence.EntityManager
 
@@ -17,6 +16,9 @@ class FavoriteRepositoryTest {
 
     @Autowired
     private lateinit var favoriteRepository: FavoriteRepository
+
+    @Autowired
+    private lateinit var stationRepository: StationRepository
 
     private lateinit var favorite: Favorite
 
@@ -66,6 +68,12 @@ class FavoriteRepositoryTest {
         assertThat(actual).isEmpty
     }
 
+    @Test
+    fun 중복된_이전_출발역_등록() {
+       assertThrows<DataIntegrityViolationException> {
+           favoriteRepository.save(Favorite(stationRepository.findByName("서울역"), stationRepository.findByName("의정부역")))
+       }
+    }
 
     private fun 데이터_조회(): Favorite = favoriteRepository.findById(1L).get()
 
