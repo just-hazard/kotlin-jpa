@@ -14,6 +14,6 @@ class LineStation(
     val previousStation: Station,
     @ManyToOne(fetch = FetchType.LAZY)
     val station: Station,
-    val distance: Int
+    val distance: Distance
 ) : Base() {
 }
