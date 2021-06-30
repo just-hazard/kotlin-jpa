@@ -5,12 +5,10 @@ import just.hazard.kotlinjpa.domain.Member
 import just.hazard.kotlinjpa.domain.MemberFavorite
 import just.hazard.kotlinjpa.domain.Station
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertAll
+import org.junit.jupiter.api.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
+import org.springframework.dao.DataIntegrityViolationException
 import javax.persistence.EntityManager
 
 @DataJpaTest
@@ -21,6 +19,9 @@ class MemberFavoriteRepositoryTest {
 
     @Autowired
     private lateinit var stationRepository: StationRepository
+
+    @Autowired
+    private lateinit var favoriteRepository: FavoriteRepository
 
     @Autowired
     private lateinit var memberRepository: MemberRepository
@@ -59,12 +60,14 @@ class MemberFavoriteRepositoryTest {
     }
 
     @Test
-    fun 중복된_지하철역_등록() {
+    fun 사용자별_중복된_즐겨찾기_지하철역_등록() {
         val actual  = MemberFavorite(
-            Favorite(stationRepository.findByName("서울역"), stationRepository.findByName("의정부역")),
+            favoriteRepository.findById(1L).get(),
             (memberRepository.findById(1L).get()))
-
-        memberFavoriteRepository.save(actual)
+        assertThrows<DataIntegrityViolationException> {
+            memberFavoriteRepository.save(actual)
+        }
+        entityManager.clear()
     }
 
     @Test
