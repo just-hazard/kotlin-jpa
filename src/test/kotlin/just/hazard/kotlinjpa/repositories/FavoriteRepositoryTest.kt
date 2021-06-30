@@ -73,6 +73,7 @@ class FavoriteRepositoryTest {
        assertThrows<DataIntegrityViolationException> {
            favoriteRepository.save(Favorite(stationRepository.findByName("서울역"), stationRepository.findByName("의정부역")))
        }
+        entityManager.clear()
     }
 
     private fun 데이터_조회(): Favorite = favoriteRepository.findById(1L).get()
