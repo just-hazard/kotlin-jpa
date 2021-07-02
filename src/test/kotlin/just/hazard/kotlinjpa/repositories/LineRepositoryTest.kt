@@ -1,7 +1,13 @@
 package just.hazard.kotlinjpa.repositories
 
+import just.hazard.kotlinjpa.domain.Distance
 import just.hazard.kotlinjpa.domain.Line
+import just.hazard.kotlinjpa.domain.LineStation
+import just.hazard.kotlinjpa.domain.Station
 import org.assertj.core.api.Assertions.assertThat
+import org.hamcrest.CoreMatchers.containsString
+import org.hamcrest.CoreMatchers.either
+import org.hamcrest.MatcherAssert
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -61,12 +67,33 @@ class LineRepositoryTest {
         assertThat(line).isEmpty
     }
 
+    @Test
+    fun 노선_조회시_그래프탐색() {
+        라인_지하철_등록()
+        val actual = lineRepository.findByName("2호선")
+        assertThat(actual.lines[0].distance.distance).isEqualTo(10)
+        라인_데이터_체크(actual, "초록색","2호선")
+        actual.lines.forEach {
+            MatcherAssert.assertThat(it.previousStation.name,
+                either(containsString("건대입구역")).or(containsString("잠실역")))
+        }
+    }
+
+    private fun 라인_지하철_등록() {
+        val line2 = Line("초록색","2호선")
+        val 잠실역 = Station("잠실역")
+        line2.updateLineStation(LineStation(line2, Station("건대입구역"), 잠실역, Distance(10)))
+        line2.updateLineStation(LineStation(line2, 잠실역, Station("삼성역"), Distance(15)))
+
+        lineRepository.save(line2)
+    }
+
     private fun 데이터_조회() = lineRepository.findById(1L).get()
 
     private fun 라인_데이터_체크(actual: Line, color: String, name: String) {
         assertAll(
-            { assertThat(line.color).isEqualTo(color) },
-            { assertThat(line.name).isEqualTo(name) },
+            { assertThat(actual.color).isEqualTo(color) },
+            { assertThat(actual.name).isEqualTo(name) },
             { assertThat(actual.id).isNotNull() },
             { assertThat(actual.createdDate).isNotNull() },
             { assertThat(actual.modifiedDate).isNotNull() },

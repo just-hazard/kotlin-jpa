@@ -1,6 +1,9 @@
 package just.hazard.kotlinjpa.domain
 
-class Distance(distance: Int) {
+import javax.persistence.Embeddable
+
+@Embeddable
+class Distance(var distance: Int = 0) {
 
     init {
         validationPositiveNumber(distance)
