@@ -18,7 +18,6 @@ class BookStoreService(private val bookRepository: BookRepository) {
         }.map {
             bookMap.put(it.bookName, mutableListOf(it))
         }
-
         return bookMap
     }
 }
