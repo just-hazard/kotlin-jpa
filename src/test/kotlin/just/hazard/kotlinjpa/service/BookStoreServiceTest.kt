@@ -30,4 +30,5 @@ class BookStoreServiceTest {
         val actual = bookService.findBookNameSorting()
         assertThat(actual.size).isEqualTo(1)
     }
+
 }
