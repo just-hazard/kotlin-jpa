@@ -29,6 +29,7 @@ class BookStoreServiceTest {
     fun 이름별_책_정렬() {
         val actual = bookService.findBookNameSorting()
         assertThat(actual.size).isEqualTo(1)
+        assertThat(actual["저스디스"]!!.size).isEqualTo(3)
     }
 
 }
