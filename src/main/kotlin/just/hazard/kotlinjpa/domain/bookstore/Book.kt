@@ -12,11 +12,17 @@ class Book(
 ) : Base() {
 
     companion object {
-        fun moveResponseObject(book: Book): ResponseBook {
+        fun moveDataResponseBook(book: Book): ResponseBook {
             return ResponseBook(book.bookName,
                 book.bookCase,
                 book.bookCaseHeight,
                 book.bookCaseWidth)
+        }
+        fun moveDataBook(requestBook: RequestBook) : Book {
+            return Book(requestBook.bookName,
+                requestBook.bookCase,
+                requestBook.bookCaseHeight,
+                requestBook.bookCaseWidth)
         }
     }
 
