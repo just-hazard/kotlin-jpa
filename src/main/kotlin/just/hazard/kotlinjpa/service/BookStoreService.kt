@@ -9,14 +9,14 @@ import org.springframework.transaction.annotation.Transactional
 class BookStoreService(private val bookRepository: BookRepository) {
 
     @Transactional(readOnly = true)
-    fun findBookNameSorting() : Map<String,MutableList<Book>> {
-        val bookMap: MutableMap<String,MutableList<Book>> = HashMap()
+    fun findSortedBookName() : Map<String,MutableList<Book.ResponseBook>> {
+        val bookMap: MutableMap<String,MutableList<Book.ResponseBook>> = HashMap()
         val books = bookRepository.findAll()
         books.forEach {
             if(bookMap.containsKey(it.bookName))
-                bookMap[it.bookName]!!.add(it)
+                bookMap[it.bookName]!!.add(Book.moveResponseObject(it))
             else
-                bookMap[it.bookName] = mutableListOf(it)
+                bookMap[it.bookName] = mutableListOf(Book.moveResponseObject(it))
         }
         return bookMap
     }
